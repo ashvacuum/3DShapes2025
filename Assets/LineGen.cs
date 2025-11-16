@@ -7,6 +7,7 @@ public class LineGen : MonoBehaviour
     public float cubeSize;
     public Vector2 cubePos;
     public float zPos;
+    public float zRot = 0;
 
     private void OnPostRender()
     {
@@ -30,6 +31,8 @@ public class LineGen : MonoBehaviour
         var backSquare = GetCube();
         var backZ = PerspectiveCamera.Instance.GetPerspective(zPos - cubeSize * .5f);
 
+        RotationalMatrixComputation(ref frontSquare);
+        RotationalMatrixComputation(ref backSquare);
         var computedFront = RenderSquare(frontSquare, frontZ);
         var computedBack = RenderSquare(backSquare, backZ);
 
@@ -72,6 +75,16 @@ public class LineGen : MonoBehaviour
             GL.Vertex(squareElements[(i + 1) % squareElements.Length] * perspective);
         }
         return computedSquare;
+    }
+
+    private void RotationalMatrixComputation(ref Vector2[] squareElements)
+    {
+        var convertedRadians = zRot * Mathf.Deg2Rad;
+        for (var i = 0; i < squareElements.Length; i++)
+        {
+            squareElements[i] = new Vector2(squareElements[i].x * Mathf.Cos(convertedRadians) - squareElements[i].y * Mathf.Sin(convertedRadians), 
+                squareElements[i].y * Mathf.Cos(convertedRadians) + squareElements[i].x * Mathf.Sin(convertedRadians));
+        }
     }
 
 }
