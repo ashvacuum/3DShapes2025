@@ -147,7 +147,7 @@ public class LineGen : MonoBehaviour
         } 
     }
 
-    public struct Circle()
+    public struct Circle
     {
         Vector3 Pos;
         float radius;
